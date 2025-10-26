@@ -189,6 +189,25 @@ body {
   transform: translateY(0);
 }
 
+.price-summary {
+  bottom: 0;
+  margin-top: 16px;
+  padding: 12px 12px 14px;
+  background: rgba(255, 255, 255, 0.98);
+  border: 2px solid #e8e8f8;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+}
+
+.price-total {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 6px 0;
+  font-weight: 700;
+  font-size: 1.05rem;
+}
+
 @media (max-width: 1024px) {
   .container {
     flex-direction: column;
