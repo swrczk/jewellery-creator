@@ -17,11 +17,10 @@ const stoneColors = {
     "KoralNiebieski": "#7294caff" //https://www.korallo.pl/koral-niebieski-kulka-fasetowana-4mm-35481
 };
 
-const showBackground = ["BialaMuszla" ];
 
-const metalColors = { gold: "#d4af37", silver: "#c0c0c0" };
+const showBackground = ["BialaMuszla"];
+const metalColors = { gold: "#DAA520 ", silver: "#8C92AC " };
 
-// --- State ---
 const selection = {
     color: "gold",
     stones: "Ametyst",
@@ -29,12 +28,10 @@ const selection = {
     clasp: "ring"
 };
 
-// --- Canvas ---
 const canvas = document.getElementById("necklaceCanvas");
 const ctx = canvas.getContext("2d");
-
-// --- Image cache (preload one time) ---
 const cache = {};
+
 function getImage(src) {
     return new Promise((resolve, reject) => {
         if (cache[src]?.complete) return resolve(cache[src]);
@@ -45,7 +42,6 @@ function getImage(src) {
     });
 }
 
-// --- Helpers ---
 function capitalize(str) { return str.charAt(0).toUpperCase() + str.slice(1); }
 
 function colorToHex(category, value) {
@@ -54,26 +50,19 @@ function colorToHex(category, value) {
     return "#ffffff";
 }
 
-// Tint a single image on an offscreen canvas, then draw result to the main canvas.
-// This guarantees, że kolorujemy WYŁĄCZNIE piksele tej warstwy.
 async function drawTintedLayer(src, hexColor) {
     const img = await getImage(src);
-
-    // offscreen
     const off = document.createElement("canvas");
     off.width = canvas.width;
     off.height = canvas.height;
     const octx = off.getContext("2d");
 
-    // 1) draw image
     octx.drawImage(img, 0, 0, off.width, off.height);
-    // 2) tint only where image has alpha
     octx.globalCompositeOperation = "source-atop";
     octx.fillStyle = hexColor;
     octx.fillRect(0, 0, off.width, off.height);
     octx.globalCompositeOperation = "source-over";
 
-    // paste onto main
     ctx.drawImage(off, 0, 0);
 }
 
@@ -81,75 +70,62 @@ async function updatePreview() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     const layers = [
-        // beads: kolor według stones
         { src: "img/beads.png", colorCategory: "stones" },
-        // metalBeads + clasp + pendant: kolor według metal color
         { src: "img/metalBeads.png", colorCategory: "color" },
         { src: `img/clasp${capitalize(selection.clasp)}.png`, colorCategory: "color" },
         { src: `img/pendant${capitalize(selection.pendant)}.png`, colorCategory: "color" }
     ];
 
-    // rysujemy po kolei, każdą warstwę tintujemy osobno
     for (const layer of layers) {
         const color = colorToHex(layer.colorCategory, selection[layer.colorCategory]);
         await drawTintedLayer(layer.src, color);
     }
-
-    // --- Ustaw tło w zależności od wybranego kamienia ---
-    const previewDiv = document.querySelector(".preview");
-    if (showBackground.includes(selection.stones)) {
-        previewDiv.style.backgroundColor = "#85858540";
-    } else {
-        previewDiv.style.backgroundColor = "#ffffff";
-    }
-
 }
 
-// --- UI handlers ---
-// Użyjemy event z inline onclick: onclick="selectOption('stones','Ametyst', event)"
 function selectOption(category, value, ev) {
     selection[category] = value;
 
-    document
-        .querySelectorAll(`button[onclick*="${category}"]`)
+    document.querySelectorAll(`.option-button[onclick*="${category}"]`)
         .forEach(btn => btn.classList.remove("selected"));
-    if (ev?.target) ev.target.classList.add("selected");
+    if (ev?.target) {
+        const btn = ev.target.closest('.option-button');
+        if (btn) btn.classList.add("selected");
+    }
 
     updatePreview();
-
-    if (category === "stones") updateStonePreview(); // <--- nowy podgląd
+    if (category === "stones") updateStonePreview();
 }
 
 function copySelection() {
     const text = Object.entries(selection).map(([k, v]) => `${k}: ${v}`).join("\n");
     navigator.clipboard.writeText(text);
+
+    const btn = document.querySelector('.copy-button');
+    btn.textContent = '✅ Skopiowano!';
+    setTimeout(() => {
+        btn.textContent = '📋 Kopiuj wybór';
+    }, 2000);
 }
 
 function updateStonePreview() {
     const previewDiv = document.querySelector(".preview");
     const stoneName = selection.stones;
 
-    // usuń poprzedni podgląd (jeśli istnieje)
     const existing = document.getElementById("stone-preview-image");
     if (existing) existing.remove();
 
-    // utwórz nowy obrazek
     const img = document.createElement("img");
     img.id = "stone-preview-image";
-    img.className = "stone-preview"; // 🎨 stylowanie przez CSS
+    img.className = "stone-preview";
     img.src = `img/${stoneName}.png`;
     img.alt = stoneName;
 
     previewDiv.appendChild(img);
-
-    // animacja pojawiania się
     requestAnimationFrame(() => (img.style.opacity = "1"));
 }
 
-// first render
 updatePreview();
 updateStonePreview();
-
 
 /**
  * cena
