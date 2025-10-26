@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pl">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Projektant Naszyjnika</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="controls">
+            <h2>Kolor stali chirurgicznej (6 zl)</h2>
+            <div class="button-group">
+                <button onclick="selectOption('color','gold', event)">Złoty</button>
+                <button onclick="selectOption('color','silver', event)">Srebrny</button>
+            </div>
+
+            <h2>Kamienie naturalne</h2>
+            <div class="button-group">
+                <button onclick="selectOption('stones', 'Ametyst', event)">Ametyst (47 zl)</button>
+                <button onclick="selectOption('stones', 'KamienKsiezycowy', event)">Kamień księżycowy (36 zl)</button>
+                <button onclick="selectOption('stones', 'KamienSloneczny', event)">Kamień słoneczny (36 zl)</button>
+                <button onclick="selectOption('stones', 'Lolit', event)">Lolit (38 zl)</button>
+                <button onclick="selectOption('stones', 'KocieOkoTurkusowa', event)">Kocie oko - turkusowe (23 zl)</button>
+                <button onclick="selectOption('stones', 'KocieOkoFioletowa', event)">Kocie oko - fioletowe (23 zl)</button>
+                <button onclick="selectOption('stones', 'KocieOkoZielona', event)">Kocie oko - zielone (23 zl)</button>
+                <button onclick="selectOption('stones', 'KocieOkoSzary', event)">Kocie oko - szare (23 zl)</button>
+                <button onclick="selectOption('stones', 'BialaMuszla', event)">Biała muszla (40 zl)</button>
+                <button onclick="selectOption('stones', 'AmetystLawendowy', event)">Ametyst lawendowy (50 zl)</button>
+                <button onclick="selectOption('stones', 'Sodalit', event)">Sodalit (29 zl)</button>
+                <button onclick="selectOption('stones', 'OpalSyntetyczny', event)">Opal syntetyczny (24 zl)</button>
+                <button onclick="selectOption('stones', 'ZielonaMasaPerlowa', event)">Zielona masa perłowa (33 zl)</button>
+                <button onclick="selectOption('stones', 'Fluoryt', event)">Fluoryt (27 zl)</button>
+                <button onclick="selectOption('stones', 'KoralNiebieski', event)">Koral niebieski (36 zl)</button>
+            </div>
+
+
+            <h2>Zawieszka (5-15 zl)</h2>
+            <div class="button-group">
+                <button onclick="selectOption('pendant', 'sun')">Słońce</button>
+                <button onclick="selectOption('pendant', 'moon')">Księżyc</button>
+                <button onclick="selectOption('pendant', 'random')">Losowa</button>
+            </div>
+
+            <h2>Zapięcie</h2>
+            <div class="button-group">
+                <button onclick="selectOption('clasp', 'ring')">Kółko (2 zl)</button>
+                <button onclick="selectOption('clasp', 'crab')">Krab (3 zl)</button>
+            </div>
+
+            <button id="copyButton" onclick="copySelection()">📋 Kopiuj wybór</button>
+        </div>
+
+        <div class="preview">
+            <canvas id="necklaceCanvas" width="400" height="400"></canvas>
+        </div>
+    </div>
+</body>
+
+<script src="script.js"></script>
+
+</html>
